@@ -21,6 +21,7 @@ namespace CustomWebServer
             listenerLogic.Start(new[] { String.Format("http://*:{0}/Guestbook/", port) }, new GuestbookProcessor());
             listenerLogic.Start(new[] { String.Format("http://*:{0}/", port) }, new DefaultProcessor());
             IoCContainer.Get<ILog>().Info("Сервер успешно инициализирован.");
+            Console.ReadLine();
         }
 
     }

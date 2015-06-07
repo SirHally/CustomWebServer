@@ -51,8 +51,7 @@ namespace CustomWebServer.Logic.Http
         {
             var listener = Create(prefixes);
             //Каждый слушатель будет обрабатываться независимо, в своем потоке
-            var thread = new Thread(Listen);
-            thread.Start(new RequestInfo
+            ThreadPool.QueueUserWorkItem(Listen, new RequestInfo
             {
                 Listener = listener,
                 Processor = callback
