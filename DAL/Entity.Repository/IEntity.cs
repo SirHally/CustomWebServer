@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data.Entity;
 using System.Linq;
 
 namespace CustomWebServer.DAL.Repository
