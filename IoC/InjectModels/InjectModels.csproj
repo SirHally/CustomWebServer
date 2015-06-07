@@ -46,8 +46,9 @@
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\CustomWebServer\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core">
       <HintPath>..\..\packages\Microsoft.AspNet.Identity.Core.2.0.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
@@ -87,10 +88,6 @@
     <ProjectReference Include="..\..\DAL\Entity\Entity.csproj">
       <Project>{f3fb61a0-d12c-4cd4-858a-4f284644b857}</Project>
       <Name>Entity</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Types\Types.csproj">
-      <Project>{f75fd45b-afae-4c25-8af7-6e4e00c89592}</Project>
-      <Name>Types</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
