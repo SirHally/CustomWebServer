@@ -63,41 +63,32 @@ namespace CustomWebServer.Logic.Http
         /// Ожидает получения запроса
         /// </summary>
         /// <param name="param"></param>
-        private void Listen(object param)
+        private async void Listen(object param)
         {
             var data = (RequestInfo) param;
             while (true)
             {
-                var result = data.Listener.BeginGetContext(Recieve, data);
-                result.AsyncWaitHandle.WaitOne();
+                HttpListenerContext context = await data.Listener.GetContextAsync();
+                IoCContainer.Get<ILog>().InfoFormat("Получен запрос на слушатель - {0}.", String.Join(", ", data.Listener.Prefixes));
+
+                HttpListenerRequest request = context.Request;
+                HttpListenerResponse response = context.Response;
+
+                try
+                {
+                    data.Processor.Process(new CustomHttpListenerRequest(request), new CustomHttpListenerResponse(response));
+                }
+                catch (Exception ex)
+                {
+                    response.StatusCode = 500;
+                    response.StatusDescription = "Internal Server Error";
+                    response.ContentType = "text/plain";
+                    IoCContainer.Get<ILog>().Error("Произошла ошибка", ex);
+                    IoCContainer.Get<ResponseLogic>().Execute(ex.Message, new CustomHttpListenerResponse(response));
+                }
             }
         }
 
-        /// <summary>
-        /// Обработка полученного запроса
-        /// </summary>
-        /// <param name="result"></param>
-        private static void Recieve(IAsyncResult result)
-        {
-            var data = (RequestInfo) result.AsyncState;
-            IoCContainer.Get<ILog>().InfoFormat("Получен запрос на слушатель - {0}.", String.Join(", ", data.Listener.Prefixes));
-            HttpListenerContext context = data.Listener.EndGetContext(result);
 
-            HttpListenerRequest request = context.Request;
-            HttpListenerResponse response = context.Response;
-
-            try
-            {
-                data.Processor.Process(new CustomHttpListenerRequest(request), new CustomHttpListenerResponse(response));
-            }
-            catch (Exception ex)
-            {
-                response.StatusCode = 500;
-                response.StatusDescription = "Internal Server Error";
-                response.ContentType = "text/plain";
-                IoCContainer.Get<ILog>().Error("Произошла ошибка", ex);
-                IoCContainer.Get<ResponseLogic>().Execute(ex.Message, new CustomHttpListenerResponse(response));
-            }
-        }
     }
 }
